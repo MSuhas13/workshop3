@@ -18,7 +18,7 @@ pipeline {
                      def repoUrl = ''
                      def subDirectory = ''
                     if (params.awsService == 'EC2') {
-                        repoUrl = "https://github.com/velayutham19931208/EC2-TF-repo.git"
+                        repoUrl = "https://github.com/velayutham19931208/TF_AutoJen_Inst.git"
                         subDirectory = 'ec2'
                     } else if (params.awsService == 'S3') {
                                repoUrl =  "https://github.com/velayutham19931208/S3-TF-repo.git"
