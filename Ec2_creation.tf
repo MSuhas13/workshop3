@@ -24,8 +24,8 @@ resource "null_resource" "name" {
   #echo "----------------ssh done-------------"
   # copy the install_jenkins.sh file from your computer to the ec2 instance 
   provisioner "file" {
-    source      = "/home/ec2-user/Scripts/install_jenkins.sh"
-    destination = "/tmp/install_jenkins.sh"
+    source      = file("/home/ec2-user/Scripts/install_jenkins.sh")
+    destination = file("/tmp/install_jenkins.sh")
   }
   #echo "----------copy install jenkins file done--------------"
   #echo "--------install jenkins file execution in progress--------"
