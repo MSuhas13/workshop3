@@ -15,13 +15,13 @@ resource "aws_instance" "webserver" {
     connection {
       type        = "ssh"
       user        = "ec2-user"
-      private_key = "${file("/home/ec2-user/PEM/autojen_inst_in_ec2.pem")}"
+      private_key = "${file("autojen_inst_in_ec2.pem")}"
       host        = "${self.public_ip}"
     }
    }
 
 
   tags = {
-    Name = "FileProvisionerDemo"
+    Name = "FileProvisionerinstance"
   }
 }
