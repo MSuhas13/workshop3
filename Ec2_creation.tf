@@ -21,14 +21,13 @@ resource "null_resource" "name" {
     private_key = file("/home/ec2-user/PEM/autojen_inst_in_ec2.pem")
     host        = aws_instance.foo.public_ip
   }
-  #echo "----------------ssh done-------------"
+  
   # copy the install_jenkins.sh file from your computer to the ec2 instance 
   provisioner "file" {
-    source      = file("/home/ec2-user/Scripts/install_jenkins.sh")
+    source      = "install_jenkins.sh"
     destination = "/tmp/install_jenkins.sh"
   }
-  #echo "----------copy install jenkins file done--------------"
-  #echo "--------install jenkins file execution in progress--------"
+  
   # set permissions and run the install_jenkins.sh file
   provisioner "remote-exec" {
     inline = [
@@ -36,7 +35,7 @@ resource "null_resource" "name" {
         "sh /tmp/install_jenkins.sh",
     ]
   }
-  #echo "---------install jenkins file execution completed-------"
+  
   # wait for ec2 to be created
   depends_on = [aws_instance.foo]
 }
