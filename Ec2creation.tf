@@ -9,19 +9,19 @@ resource "aws_instance" "webserver" {
   associate_public_ip_address = true
 
    provisioner "file" {
-        source      = "install_jenkins.sh"
+        source      = "/home/ec2-user/Scripts/install_jenkins.sh"
         destination = "/home/ec2-user/install_jenkins.sh"
        
     connection {
       type        = "ssh"
       user        = "ec2-user"
-      private_key = "${file("autojen_inst_in_ec2.pem")}"
+      private_key = "${file("/home/ec2-user/PEM/autojen_inst_in_ec2.pem")}"
       host        = "${self.public_ip}"
     }
    }
 
 
   tags = {
-    Name = "FileProvisionerinstance"
+    Name = "FileProvisionerDemo"
   }
 }
