@@ -10,7 +10,7 @@ resource "aws_instance" "webserver" {
 
    provisioner "file" {
         source      = "/home/ec2-user/Scripts/install_jenkins.sh"
-        destination = "/home/ec2-user/install_jenkins.sh"
+        destination = "/tmp/install_jenkins.sh"
        
     connection {
       type        = "ssh"
