@@ -2,11 +2,19 @@ provider "aws" {
     region = "us-west-2"  
 }
 
+# create default vpc if one does not exit
+resource "aws_default_vpc" "default_vpc" {
+
+  tags    = {
+    Name  = "default vpc"
+  }
+}
+
 # create security group for the ec2 instance
 resource "aws_security_group" "ec2_security_group" {
   name        = "ec2 security group"
   description = "allow access on ports 8080 and 22"
-  vpc_id      = "vpc-0f7433f017285a686"
+  vpc_id      = aws_default_vpc.default_vpc.id
 
   # allow access on port 8080
   ingress {
