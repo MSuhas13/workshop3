@@ -102,7 +102,7 @@ resource "null_resource" "name" {
     type        = "ssh"
     user        = "ec2-user"
     private_key = file("/home/ec2-user/PEM/autojen_inst_in_ec2.pem")
-    host        = aws_instance.foo.public_ip
+    host        = aws_instance.ec2_instance.public_ip
   }
 
   # copy the install_jenkins.sh file from your computer to the ec2 instance 
