@@ -1,12 +1,29 @@
+# configured aws provider with proper credentials
 provider "aws" {
-    region = "us-west-2"  
+  region    = "us-west-2"
+  profile   = "terraform-user"
 }
+
 
 # create default vpc if one does not exit
 resource "aws_default_vpc" "default_vpc" {
 
   tags    = {
     Name  = "default vpc"
+  }
+}
+
+
+# use data source to get all avalablility zones in region
+data "aws_availability_zones" "available_zones" {}
+
+
+# create default subnet if one does not exit
+resource "aws_default_subnet" "default_az1" {
+  availability_zone = data.aws_availability_zones.available_zones.names[0]
+
+  tags   = {
+    Name = "default subnet"
   }
 }
 
@@ -46,16 +63,37 @@ resource "aws_security_group" "ec2_security_group" {
   }
 }
 
-## launch the ec2 instance
-resource "aws_instance" "foo" {
-  ami           = "ami-002829755fa238bfa" # us-east-1
-  instance_type = "t2.micro"
-  vpc_security_group_ids = ["aws_security_group.ec2_security_group.id"]
-  key_name      = "autojen_inst_in_ec2"
-  tags = {
-      Name = "ec2-TFjenkins-Instance"
+# use data source to get a registered amazon linux 2 ami
+data "aws_ami" "amazon_linux_2" {
+  most_recent = true
+  owners      = ["amazon"]
+  
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm*"]
   }
 }
+
+
+# launch the ec2 instance and install website
+resource "aws_instance" "ec2_instance" {
+  ami                    = data.aws_ami.amazon_linux_2.id
+  instance_type          = "t2.micro"
+  subnet_id              = aws_default_subnet.default_az1.id
+  vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
+  key_name               = "autojen_inst_in_ec2"
+  # user_data            = file("install_jenkins.sh")
+
+  tags = {
+    Name = "ec2-autojen-demo"
+  }
+}
+
 
 # an empty resource block
 resource "null_resource" "name" {
@@ -83,11 +121,11 @@ resource "null_resource" "name" {
   }
 
   # wait for ec2 to be created
-  depends_on = [aws_instance.foo]
+  depends_on = [aws_instance.ec2_instance]
 }
 
 
 # print the url of the jenkins server
 output "website_url" {
-  value     = join ("", ["http://", aws_instance.foo.public_dns, ":", "8080"])
+  value     = join ("", ["http://", aws_instance.ec2_instance.public_dns, ":", "8080"])
 }
