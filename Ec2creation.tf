@@ -28,7 +28,7 @@ resource "aws_default_subnet" "default_az1" {
 
 # create security group for the ec2 instance
 resource "aws_security_group" "ec2_security_group" {
-  name        = "ec2 security group"
+  name        = "ec2 security group demo"
   description = "allow access on ports 8080 and 22"
   vpc_id      = aws_default_vpc.default_vpc.id
 
@@ -89,13 +89,13 @@ resource "aws_instance" "ec2_instance" {
   # user_data            = file("install_jenkins.sh")
 
   tags = {
-    Name = "ec2-autojen-demo-Final"
+    Name = "ec2-autojen-demo123"
   }
 }
 
 
 # an empty resource block
-resource "null_resource" "name" {
+resource "connect_resource" "name" {
 
   # ssh into the ec2 instance 
   connection {
@@ -126,5 +126,5 @@ resource "null_resource" "name" {
 
 # print the url of the jenkins server
 output "website_url" {
-  value     = join ("", ["http://", aws_instance.ec2_instance.public_dns, ":", "8080"])
+  value     = join ("", ["http://", aws_instance.ec2_instance.public_ip, ":", "8080"])
 }
