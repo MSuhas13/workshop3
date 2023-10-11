@@ -89,7 +89,7 @@ resource "aws_instance" "ec2_instance" {
   # user_data            = file("install_jenkins.sh")
 
   tags = {
-    Name = "ec2-autojen-demo123"
+    Name = "ec2-autojen-demo08"
   }
 }
 
