@@ -95,7 +95,7 @@ resource "aws_instance" "ec2_instance" {
 
 
 # an empty resource block
-resource "connect_resource" "name" {
+resource "null_resource" "name" {
 
   # ssh into the ec2 instance 
   connection {
