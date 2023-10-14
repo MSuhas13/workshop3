@@ -74,7 +74,7 @@ data "aws_ami" "amazon_linux_2023" {
 
   filter {
     name   = "name"
-    values = ["al2023-ami-2023*"]
+    values = ["amzn2-ami-kernel*"]
   }
 }
 
@@ -82,7 +82,7 @@ data "aws_ami" "amazon_linux_2023" {
 # launch the ec2 instance and install website
 resource "aws_instance" "ec2_instance" {
   ami                    = data.aws_ami.amazon_linux_2023.id
-  instance_type          = "t2.medium"
+  instance_type          = "t2.micro"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
   key_name               = "autojen_inst_in_ec2"
